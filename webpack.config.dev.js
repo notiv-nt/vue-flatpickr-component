@@ -7,12 +7,18 @@ const {VueLoaderPlugin} = require('vue-loader');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   mode: 'development',
   context: __dirname,
+  resolveLoader: {
+    plugins: [
+      PnpWebpackPlugin.moduleLoader(module),
+    ],
+  },
   resolve: {
     modules: [
       path.resolve(__dirname, 'node_modules'),
@@ -21,6 +27,9 @@ module.exports = {
       'vue$': 'vue/dist/vue.runtime.esm.js'
     },
     extensions: ['.js', '.json', '.vue'],
+    plugins: [
+      PnpWebpackPlugin,
+    ],
   },
   entry: './examples/index.js',
   output: {
@@ -37,7 +46,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: require.resolve('babel-loader'),
         exclude: /node_modules/,
       },
       {
@@ -45,13 +54,13 @@ module.exports = {
         use: [
           isProduction ? MiniCssExtractPlugin.loader :
             {
-              loader: "style-loader",
+              loader: 'style-loader',
               options: {
                 sourceMap: !isProduction,
               }
             },
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
               sourceMap: !isProduction,
             }
@@ -72,7 +81,6 @@ module.exports = {
           name: '[path][name]-[hash].[ext]',
         }
       }
-
     ]
   },
   // https://gist.github.com/sokra/1522d586b8e5c0f5072d7565c2bee693

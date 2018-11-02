@@ -6,9 +6,15 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const {VueLoaderPlugin} = require('vue-loader');
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 module.exports = {
   context: __dirname,
+  resolveLoader: {
+    plugins: [
+      PnpWebpackPlugin.moduleLoader(module),
+    ],
+  },
   resolve: {
     modules: [
       path.resolve(__dirname, 'node_modules'),
@@ -16,7 +22,10 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js'
     },
-    extensions: ['.js', '.json', '.vue']
+    extensions: ['.js', '.json', '.vue'],
+    plugins: [
+      PnpWebpackPlugin,
+    ],
   },
   entry: './src/index.js',
   externals: {
