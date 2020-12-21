@@ -1,4 +1,5 @@
 import Flatpickr from 'flatpickr';
+import {h} from 'vue';
 import {excludedEvents, includedEvents} from "./events.js";
 import {arrayify, camelToKebab, cloneObject} from "./util.js";
 // You have to import css yourself
@@ -11,8 +12,8 @@ const configCallbacks = ['locale', 'showMonths'];
 
 export default {
   name: 'flat-pickr',
-  render(el) {
-    return el('input', {
+  render() {
+    return h('input', {
       attrs: {
         type: 'text',
         'data-input': true,
